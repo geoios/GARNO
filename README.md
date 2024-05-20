@@ -65,7 +65,7 @@ GenerateSVPGrid的Line 122的C=v+n*y(j)表示在N方向设置n大小的水平梯
 
 
 #### 偶然误差和系统误差设置
-误差设置：
+SimulationRose.m文件Line 116进行误差设置：
 
 1.GNSS天线误差INIData.CoordianteError=[0;0;0];
 

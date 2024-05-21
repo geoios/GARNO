@@ -1,10 +1,10 @@
 function INIData = SimulationINISet(w,i0) %
-%% 海面图形参数设计
-% 要求由于声速剖面时间范围（2019.7.13.21:30:17——2019.7.15.13:18:26），因此起止时间应在其内。
-% 圆形（中心坐标XY，半径，角速度，角加速度，间隔时间，初始时间，结束时间，偏转角度）
-% 玫瑰形（中心坐标XY，包络半径，形状参数，角速度，角加速度，间隔时间，初始时间，结束时间，偏转角度）
-% 螺旋形（中心坐标XY，初始半径，角速度，角加速度，初始螺距，螺距增长速度，螺距增长加速度，间隔时间，初始时间，结束时间，偏转角度）
-% 线段（中心坐标XY，速度，加速度，间隔时间，初始时间，结束时间，偏转角度）
+%%Design of sea surface graphic parameters
+%Due to the time range of sound velocity profile (2019.7.131:30:17 to 2019.7.15.13:18:26), the start and end times should be within this range.
+%Circle (center coordinate XY, radius, angular velocity, angular acceleration, interval time, initial time, end time, deflection angle)
+%Rose shaped (center coordinate XY, envelope radius, shape parameters, angular velocity, angular acceleration, interval time, initial time, end time, deflection angle)
+%Spiral shape (center coordinate XY, initial radius, angular velocity, angular acceleration, initial pitch, pitch growth rate, pitch growth acceleration, interval time, initial time, end time, deflection angle)
+%Line segments (center coordinate XY, velocity, acceleration, interval time, initial time, end time, deflection angle)
 INIData.SurFrom = 'Roses';  % 1.'Cirlce'; 2.'Roses';  3.'Spirl'; 4.'Segment'
 petal = 2;
 q = w; % 0.354
@@ -23,15 +23,15 @@ n = size(S,1);
 INIData.SurMP = S;
 INIData.LineNum = n;
 INIData.TNum = TNum;
-% 海面高程运动轨迹([标准随机系数项，常数项，线性项，sin振幅项，sin周期项 sin初相 cos振幅项，cos周期项 cos初相])
+% Sea surface elevation motion trajectory ([standard random coefficient term, constant term, linear term, sin amplitude term, sin periodic term sin initial phase cos amplitude term, cos periodic term cos initial phase])
 INIData.H=[0,0,0];
-% 海底测站观测间隔
+% Observation interval of underwater stations
 INIData.TSecond = 80;
 %INIData.TSecond = 20;
 %INIData.TSecond = 5;
-% 海面姿态角运动轨迹
+% Sea surface attitude angle motion trajectory
 INIData.AttitudeFun=[0,0.01,0;0,0.01,0;0,0.01,0]; % [E;N;U]
-% 臂长参数
+% Arm length parameter
 % INIData.Forward = 1.5547;
 % INIData.Rightward = -1.2690;
 % INIData.Downward = 13.7295;
@@ -41,48 +41,48 @@ INIData.AttitudeFun=[0,0.01,0;0,0.01,0;0,0.01,0]; % [E;N;U]
 % INIData.Forward = 0;
 % INIData.Rightward = 0;
 % INIData.Downward = 0;
-%% 海底应答器点位设计
+%% Design of Submarine Responder Points
 INIData.FloorFrom = 'Customize';    %1.'Customize'; 2.'Polygon'; 3.'Polygon + Customize'
 switch INIData.FloorFrom
-    case 'Customize'  % 自定义设置
+    case 'Customize'  
         F = SeaBotPFun(1500*sqrt(2)/2,3000,'Centre');
         %F = SeaBotPFun(400*sqrt(2)/2,3010,'Square');%F = SeaBotPFun(1500*sqrt(2)/2,3010,'Square');
         %F = SeaBotPFun(1500*sqrt(2)/2,3000,'Square+Centre');
-    case 'Polygon'   % 正多边形参数（中心坐标X、Y、边数、外接圆半径、旋转角度）
+    case 'Polygon'   
         F = [0,0,4,100,pi/4];
 end
 %F = [0,0,-3000];
-% 一条S对应一组点
+% One S corresponds to a set of points
 INIData.FloorMP = F;
 % % INIData.TransponderName ={'M01','M02','M03','M04'};
 % INIData.TransponderName ={'M01','M02','M03','M04','M05'};
 INIData.TransponderName ={'M01','M02','M03','M04','M05'};
-% 海底点高程设置
+% Setting the elevation of seabed points
 INIData.h = [0,-3010,0];
 INIData.OutPut_FloorRandn = 0;
-%% 声速剖面相关
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%实测声速剖面预处理%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 声速剖面文件地址
+%% Sound velocity profile correlation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Pre processing of measured sound velocity profiles%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Sound velocity profile file address
 INIData.SVPFilePath='ProfileData.mat';
-% 预处理声速剖面最大深度
+% Maximum depth of preprocessed sound velocity profile
 INIData.MaxH = 3010;
-% 预处理声速剖面基准参考时间
+% Preprocessing sound velocity profile reference time
 INIData.LaunchRT=[2019,7,13,21,30,17];
-% 声速剖面据预处理分层策略
+% Stratification strategy for preprocessing sound velocity profile data
 INIData.SVPLayerModel = 'Customize';  % 1.'Fix'; 2.'Customize'
 switch INIData.SVPLayerModel
     case 'Customize'
         INIData.LayerLag= [10:10:200,250:50:550,600:100:900,1000:400:3000,3010];%[10:10:200,250:50:550,600:100:900,1000:400:3000,3010]; % 指定SVP分层间隔
-        %INIData.LayerLag= [10:10:200,250:50:700,765]; % 指定SVP分层间隔
+        %INIData.LayerLag= [10:10:200,250:50:700,765]; % Specify SVP layering interval
     case 'Fix'
         INIData.LayerLag = 10;
 end
-% 声速剖面预处理
+% Sound velocity profile preprocessing
 INIData = SVPresampling(INIData);
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%声速剖面生成策略%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%声速剖面模式选择(1.'SVPAvg'(平均声速剖面)；2.'EOF'(EOF内插声速剖面);%3.'Constant'(观测时刻常声速，不同观测时刻声速不同),
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Strategy for generating sound velocity profiles%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Sound speed profile mode selection (1. 'SVPAvg' (average sound speed profile); 2. 'EOF' (EOF interpolation sound velocity profile);% 3. 'Constant' (constant sound speed at observation time, sound speed varies at different observation times),
 %                 4.'Pseudo-3D',5.'Grid')
 INIData.SVPRandom = 'Grid';  %
 switch INIData.SVPRandom
@@ -94,8 +94,8 @@ switch INIData.SVPRandom
         INIData.SVPFunction = 'Munk'; % 1.Munk 2.Munk_3D
         INIData.SVPGridModel = 'Munk_Obliquity';
     case 'EOF'
-        % EOF函数(经验正交函数)系数A([标准随机系数项，常数项，线性项，sin振幅项，sin周期项 sin初相 cos振幅项，cos周期项
-        % cos初相])在周期项上以天为基准，0.75表示0.75天
+        % EOF function (empirical orthogonal function) coefficient A (standard random coefficient term, constant term, linear term, sin amplitude term, sin periodic term sin initial phase cos amplitude term, cos periodic term)
+        % In the periodic term, 0.75 represents 0.75 days based on days (initial phase of cos)
         INIData.SVPEOFSpdeg = 5;
         for i=1:INIData.SVPEOFSpdeg
             INIData.SVPMP{i,1}=[0,0,0,1,1];
@@ -107,61 +107,61 @@ switch INIData.SVPRandom
             INIData.CoefficientMatrix(:,i) = [3;2;1;0.5;0.75;0.5];
         end
     case 'Constant'
-        % 单层声速剖面模型([标准随机系数项，常数项，线性项，sin振幅项，sin周期项])
+        % Single layer sound velocity profile model ([standard random coefficient term, constant term, linear term, sin amplitude term, sin period term])
         INIData.MonolayerFun=[0,1490,0,3,1/4];
 end
 
 INIData.DouTCalModel = 'Cashing'; % 1.Cashing; 2.GridInter
 INIData.SVPRefModel = 'Fix_Munk'; % 1.'Avg'  2.Fix_Munk
-%% 偶然|系统误差添加
-% 误差系数([标准随机系数项，常数项，线性项，sin振幅项，sin周期项])
-% GNSS天线误差
+%% Accidental | System error addition
+% Error coefficient ([standard random coefficient term, constant term, linear term, sin amplitude term, sin period term])
+% GNSS antenna error
 INIData.CoordianteError=[0;0;0];%[0.05;0.05;0.10]
-% 传播时间误差
+% Propagation time error
 INIData.TimeError=[1*10^-4,0];%[5*10^-5,0];
-% 授时误差
+% Timing error
 INIData.TimeSerivceError=[0,0];%[10^-8,0];
-% 姿态角误差
+% Attitude angle error
 INIData.AttitudeError=[0;0;0];%[10^-3;10^-3;10^-3]
-% 臂长参数误差
+% Arm length parameter error
 INIData.ATDError=[0;0;0];
-% 海底坐标点误差
+% Seabed coordinate point error
 INIData.SolidTideError=[0;0;0];
 
-% EOF相对于平均声速剖面声速扰动检验倍数,
+% EOF relative to the average sound speed profile sound speed disturbance test multiple
 INIData.EOFCheck = 1;
-% EOF投影值PC添加系统|偶然误差比例系数
+% EOF projection value PC addition system | accidental error proportion coefficient
 INIData.EOFPCPencent = 0;
-% EOF投影值PC添加系统|偶然误差
+% EOF projection value PC addition system | accidental error
 INIData.EOFPCMistake = [1,0,0,0;1,0,0,0;1,0,0,0;1,0,0,0;1,0,0,0];%[1,0,0,0;1,0,0,0;1,0,0,0;1,0,0,0;1,0,0,0];
 
 
-% 硬件延迟提取
+% Hardware latency extraction
 INIData.HardwareDelay = INIData.TimeError(2);
 INIData.TimeError(2) = 0;
 
-% 粗差添加位置
-% 发射时刻([月,日,时,分,秒,X,Y,Z,Heading,Pitch,Roll])
+% Add position of gross error
+% Launch time ([month, day, hour, minute, second, X, Y, Z, Heading, Pitch, Roll])
 INIData.STMistake=[6,7,8,9,10,11];
-% 接收时刻([月,日,时,分,秒,标号,双程观测时间/2,X,Y,Z,Heading,Pitch,Roll])
+% Receiving time ([month, day, hour, minute, second, label, two-way observation time/2, X, Y, Z, Heading, Pitch, Roll])
 INIData.RTMistake=[7,8,9,10,11,12,13];
-% 按比例随机添加粗差
+% Randomly add gross errors proportionally
 INIData.EporchPencent=0.00;
-% 比例粗差形式([标准随机系数项，常数项])
+% Proportional gross error form ([standard random coefficient term, constant term])
 INIData.PencentMistake=[0,0;0,0;0,0];
 
-% 指定发射时刻([月,日,时,分,秒,X,Y,Z,Heading,Pitch,Roll])
+% Specify launch time ([month, day, hour, minute, second, X, Y, Z, Heading, Pitch, Roll])
 INIData.STAMistake=[6,7,8,9];
-% 指定接受时刻([月,日,时,分,秒,标号,双程观测时间/2,X,Y,Z,Heading,Pitch,Roll])
+% Specify acceptance time ([month, day, hour, minute, second, label, two-way observation time/2, X, Y, Z, Heading, Pitch, Roll])
 INIData.RTAMistake=[7,8,9,10,11];
-% 指定历元添加(胞元数组（行数:测段数，列数:发射、接受时刻）数组（行数:海底点数，列数:历元数）)
+% Specify epoch addition (cell array (rows: number of segments, columns: launch and reception time) array (rows: number of seabed points, columns: number of epochs))
 for i=1:1:n
     for j=1:2
         EporchAssign{i,j}=[1;1;1;1;1];
     end
 end
 INIData.EporchAssign=EporchAssign;
-% 指定历元粗差形式(胞元数组（行数:测段数，列数:发射、接受时刻）数组（行数:时间、坐标、姿态，列数:[标准随机系数项，常数项]）)
+% Specify the form of epoch gross error (cell array (rows: number of measurement segments, columns: launch and reception time) array (rows: time, coordinates, attitude, columns: [standard random coefficient term, constant term])
 for i=1:1:n
     for j=1:2
         AssignMistake{i,j}=[0,0,0;0,0,0;0,0,0];
@@ -169,18 +169,18 @@ for i=1:1:n
 end
 INIData.AssignMistake=AssignMistake;
 
-%% 保存文件路径
-% 数据保存地址            %% 同名文件夹大小写不敏感
+%% Save file path
+% Data storage address         %% folder with the same name is not case sensitive
 INIData.SaveAddress=['Results\BigSquare\SimulationData\'];
-% 数据输出格式            %% 1：海面图形保存格式；2：海面浮标保存格式
+% Data output format          %% 1: saving format for sea surface graphics; 2: Save format for sea surface buoys
 INIData.Model = 1;
-% 是否保存需要保存结构体
+% Do you need to save the structure
 INIData.SaveModel = 0;
-% 是否重新生成文件夹
+% Do you want to regenerate the folder
 INIData.FileDel = 0;
 
 
-% 完善判断文件是否存在，如果存在删掉重建，不存在，创建
+% Improve the judgment of whether the file exists. If it exists, delete and rebuild it. If it does not exist, create it
 str=['.\',INIData.SaveAddress(1:end-1)];
 if ~exist(str,'dir')
     mkdir(str)
@@ -189,7 +189,7 @@ if ~exist(str,'dir')
 else
     switch INIData.FileDel
         case 1
-            rmdir(str,'s') %该删除不经过回收站，慎重使用
+            rmdir(str,'s') %Delete without going through the recycle bin, use with caution
             mkdir(str)
             oldpath=path;
             path(oldpath,str)
@@ -201,19 +201,19 @@ INIData.FileINIAddress=['./initcfg','/',Site_name,'/',INIData.Campaign,'-initcfg
 INIData.FileSVPAddress=['./obsdata','/',Site_name,'/',INIData.Campaign,'-svp.csv'];
 INIData.FileOBSAddress=['./obsdata','/',Site_name,'/',INIData.Campaign,'-obs.csv'];
 
-% 保存路径构建
+% Save path construction
 INIData.SVPaddress=[INIData.SaveAddress,INIData.Campaign,'-svp.csv'];
 INIData.Obsaddress=[INIData.SaveAddress,INIData.Campaign,'-obs.csv',];
 INIData.Iniaddress=[INIData.SaveAddress,INIData.Campaign,'-initcfg.ini'];
 INIData.MatAddress=[INIData.SaveAddress,INIData.Campaign,',mat'] ;
-% 配置文件存入保存的文件路径
+% Save the configuration file to the saved file path
 % % Site_name = ['Data'];Cum =17;
 % % INIData.Campaign = [Site_name,'.',num2str(Cum)];
 % % INIData.FileINIAddress=['./initcfg','/',Site_name,'SimulationData','/',INIData.Campaign,'-initcfg.ini'];
 % % INIData.FileSVPAddress=['./obsdata','/',Site_name,'SimulationData','/',INIData.Campaign,'-svp.csv'];
 % % INIData.FileOBSAddress=['./obsdata','/',Site_name,'SimulationData','/',INIData.Campaign,'-obs.csv'];
 % % 
-% % % 保存路径构建
+% % % Save path construction
 % % INIData.SVPaddress=[INIData.SaveAddress,INIData.Campaign,'-svp.csv'];
 % % INIData.Obsaddress=[INIData.SaveAddress,INIData.Campaign,'-obs.csv',];
 % % INIData.Iniaddress=[INIData.SaveAddress,INIData.Campaign,'-initcfg.ini'];

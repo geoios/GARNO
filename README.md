@@ -1,86 +1,87 @@
 # GARNO
 GNSS-A Ranging Network Optimizer
 
-全球导航卫星系统（GNSS）-声学轨迹设计对于精确的海底大地测量定位至关重要。然而，基于普通定位模型的轨迹设计由于声速的剧烈变化而遭受重大挫折。因此我们提出了一种GNSS-A轨迹优化准则，该准则基于附加了声速变化的天顶延迟（ZAD）参数的定位模型。特别地，分别在基于普通模型和ZAD模型的准则下讨论了一类玫瑰轨迹。结果表明，小轨迹产生低精度的ZAD参数估计，这进一步影响了ZAD参数与坐标之间相关性的坐标精度。然而，当使用普通定位模型来忽略声速变化的影响时，需要减小海面轨迹的大小。这表明，在实践中，海面轨迹尺寸应略小于难以完全消除系统误差的理想情况。然而，就声速变化效应而言，GNSS-A轨迹的当前传统尺寸与最佳轨迹相距甚远。
+The design of acoustic trajectories in Global Navigation Satellite Systems (GNSS) is crucial for precise underwater geodetic positioning. However, trajectory designs based on common positioning models suffer significant setbacks due to the drastic variations in sound velocity. Therefore, we propose a GNSS-A trajectory optimization criterion based on the positioning model augmented with Zenithal Atmospheric Delay (ZAD) parameters incorporating sound velocity variations. Specifically, a class of rose trajectories is discussed under criteria based on both common and ZAD models.
+The results indicate that smaller trajectories yield lower accuracy in estimating ZAD parameters, further impacting the coordinate precision related to the correlation between ZAD parameters and coordinates. However, when using the common positioning model to disregard the influence of sound velocity variations, it is necessary to reduce the size of the sea surface trajectory. This suggests that, in practice, the size of sea surface trajectories should be slightly smaller than the ideal scenario where it is challenging to completely eliminate system errors. However, regarding the effect of sound velocity variations, the current traditional size of GNSS-A trajectories deviates significantly from the optimal trajectory.
+In the context of marine geodesy, this highlights the importance of considering sound velocity variations and optimizing trajectory designs to improve the accuracy of underwater geodetic positioning.
 
+The program mainly includes
 
-程序中主要包含
+1. Depth radius ratio setting
+   
+2. Sea surface control network carrier trajectory setting
+   
+3. Subsea control network setup
+   
+4. Observation time setting
+   
+5. Background sound speed field settings
+    
+6. Sound speed gradient setting
+    
+7. Accidental and systematic error settings
 
-1.深度半径比设置
-
-2.海面控制网载体航迹设置
-
-3.海底控制网设置
-
-4.观测时间设置
-
-5.背景声速场设置
-
-6.声速梯度设置
-
-7.偶然误差和系统误差设置
-
-## 版本
+## version
 GARNO v0.0.1 (2024.1.20)
 
-## 使用
-测试使用版本：Matlab R2022a
+## Instructions for use
+Test version：Matlab R2022a
 
-### 文件路径设置
-将整个工具箱路径设置为包含路径，程序调用数据通常为相对路径
+### File path settings
+Set the entire toolbox path to include the path, and program call data is usually a relative path
 
-### 程序运行
-直接运行Main.m文件
+### Program Running
+Directly run the Main.m file
 
-#### 深度半径比设置
-Main.m文件Line 1的q表示深度半径比，可以自由设置，Line 3的i0表示循环次数
+#### Depth radius ratio setting
+The q in Line 1 of the Main.m file represents the depth radius ratio, which can be freely set, while the i0 in Line 3 represents the number of cycles
 
-#### 海面控制网载体航迹设置
-SimulationRose.m文件Line 8设置海面控制网载体航迹，这里选择‘Roses’；Line 9的petal设置花瓣个数，奇数为花瓣个数，偶数为花瓣个数的一半，文中实验以四花瓣为例，因此petal=2
+#### Sea surface control network carrier trajectory setting
+SimulateRose. m file Line 8 sets the sea surface control network carrier trajectory, select 'Roses' here; The petal of Line 9 is set to the number of petals, with odd numbers representing the number of petals and even numbers representing half of the number of petals. The experiment in this article takes four petals as an example, so petal=2
 
-1.Cirlce:圆形轨迹
+1.Cirlce:Circular trajectory
 
-2.Roses:玫瑰曲线轨迹
+2.Roses:Rose curve trajectory
 
-3.Spirl:螺旋曲线轨迹
+3.Spirl:Spiral curve trajectory
 
-4.Segment:线段轨迹
+4.Segment:Line segment trajectory
 
-#### 海底控制网设置
-SimulationRose.m文件Line 45这里选择Customize，设置为海底中心点位置
+#### Submarine control network setup
+SimulateRose. m file Line 45, select Customize here and set it as the center point position of the seabed
 
-1.Customize:自定义设置
+1.Customize:Custom settings
 
-2.Polygon:正多边形参数设置（中心坐标X、Y、边数、外接圆半径、旋转角度）
+2.Polygon:Regular polygon parameter settings (center coordinates X, Y, number of sides, circumcircle radius, rotation angle)
 
-#### 观测时间设置
-SimulationRose.m文件Line 17的TimeNum为观测总时长，Line 18的TNum表示海面控制点间隔，文中实验总时长2 hour，海面控制点间隔80 second
+#### Observation time setting
+The TimeNum in line 17 of the SimulationRose. m file represents the total observation time, while the TNum in line 18 represents the interval between sea surface control points. The total experimental time in the text is 2 hours, and the interval between sea surface control points is 80 seconds
 
-#### 背景声速场设置
-SimulationRose.m文件Line 66的INIData.SVPFilePath设置初始声速剖面，文中实验选择SSP-based；Line 72设置分层策略（1.不等间隔分层；2.等间隔分层） 
+#### Background sound speed field settings
+SimulationRose. m file INIData for Line 66 Set the initial sound velocity profile for SVPFilePath, and select SSP based for the experiment in the text; Line 72 sets a layering strategy (1. Unequally spaced layering; 2. Equally spaced layering) 
 
-1.SSP-based：基于声速剖面构建
+1.SSP-based：Construction based on sound velocity profile
 
-2.EOF-based：EOF构建
+2.EOF-based：EOF construction
 
-#### 声速梯度设置
-GenerateSVPGrid的Line 122的C=v+n*y(j)表示在N方向设置n大小的水平梯度，通过更改n的大小改变水平梯度大小
+#### Sound speed gradient setting
+The C=v+n * y (j) of Line 122 in GenerateSVPGrid represents setting a horizontal gradient of n size in the N direction, and changing the size of n to change the horizontal gradient size
 
 
-#### 偶然误差和系统误差设置
-SimulationRose.m文件Line 116进行误差设置：
+#### Accidental and systematic error settings
+SimulateRose. m file Line 116 for error setting:
 
-1.GNSS天线误差INIData.CoordianteError=[0;0;0];
+1.GNSS antenna error INIData CoordianteError=[0; 0; 0];
 
-2.传播时间误差INIData.TimeError=[1*10^-4,0];
+2.Propagation time error INIData TimeError=[0,0];
 
-3.授时误差INIData.TimeSerivceError=[0,0];
+3.Timing error INIData TimeSerivceError=[0,0];
 
-4.姿态角误差INIData.AttitudeError=[0;0;0];
+4.Attitude angle error INIData AttributeError=[0; 0; 0];
 
-5.臂长参数误差INIData.ATDError=[0;0;0];
+5.Arm length parameter error INIData ATDError=[0; 0; 0];
 
-6.海底坐标点误差INIData.SolidTideError=[0;0;0];
+6.Submarine coordinate point error INIData SolidTideError=[0; 0; 0];
 
 
 

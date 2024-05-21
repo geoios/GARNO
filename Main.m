@@ -4,9 +4,9 @@ for i0 = 1:500
     q(w)
     i0
     
-    %% 获取当前脚本的位置
-    ScriptPath      = mfilename('fullpath');      % 脚本位置
-    [FilePath] = fileparts(ScriptPath);      % 文件夹位置
+    %% Get the location of the current script
+    ScriptPath      = mfilename('fullpath');      % Script location
+    [FilePath] = fileparts(ScriptPath);      % Folder location
     cd(FilePath);
     clear FilePath;
 

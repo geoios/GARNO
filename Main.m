@@ -10,24 +10,24 @@ for i0 = 1:500
     cd(FilePath);
     clear FilePath;
 
-    %% 配置部分
+    %% Configuration section
     %INIData = SimulationINISet();
     INIData = SimulationRose(q(w),i0);
-    %% 解算部分
-    % 1.生成海底正多边形和生成海面轨迹 坐标 (生成海底应答器，海面换能器坐标)
+    %% Solution section
+    % 1.Generate seabed regular polygons and generate sea surface trajectory coordinates (generate seabed responders, sea surface transducer coordinates)
     [INIData,ProcessData,OutData] = GenerateTwoPData(INIData);
-    % 2.换能器发射时间
+    % 2.Transmission time of the transducer
     [ProcessData,OutData] = transducerST(INIData,ProcessData,OutData);
-    % 4.加载模拟所需的声速剖面（发射时刻声速剖面生成）
+    % 4.Load the required sound velocity profile for simulation (generated during emission)
     [INIData,ProcessData] = GenerateLaunchTPF(INIData,ProcessData,OutData);
-    % 5.生成双程观测时间
+    % 5.Generate two-way observation time
     [ProcessData,OutData] = DoubleTrialT(INIData,ProcessData,OutData);
-    % 8.发射时刻、接受时刻的姿态角、臂长生成 ,生成双程接收姿态
+    % 8.Generate attitude angles and arm lengths at launch and reception times, and generate two-way receiving attitudes
     [OutData] = GenerateDoubleTrailA(INIData,ProcessData,OutData);
-    % 10.检验时间正确性(检验使用消耗时间是生成数据的3倍)
+    % 10.Verify the correctness of time (verify that the usage time is three times longer than the generated data)
     [OutData] = CheckDoubleTime(INIData,ProcessData,OutData);
-    %% 生成数据部分
-    % 11.生成发射时刻、接收时刻.mat文件
+    %% Generate data section
+    % 11. Generate transmit and receive time.mat files
     [INIData,ProcessData,OutData] = OutPutMat(INIData,ProcessData,OutData);
     OutPutJapanDatastruct(INIData,ProcessData,OutData);
    

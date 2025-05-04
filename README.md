@@ -24,6 +24,12 @@ The program mainly includes
 ## version
 GARNO v0.0.1 (2024.1.20)
 
+## Fundings
+This study was financially supported by the National Natural Science Foundation of China (41931076, 42474014), Laoshan Laboratory (LSKJ202205100, LSKJ202205105), and the Independent Research Project of State Key Laboratory of Geo-information Engineering (SKLGIE2023-ZZ-8).
+
+## Reference
+Shuqiang Xue, Kaiming Wang, Baojin Li, Jixing Zhu & Zhen Xiao GNSS-A Trajectory Optimization and Its Rose-Curve Solution Regarding Acoustic Delay Parameter Identification, Marine Geodesy, DOI: 10.1080/01490419.2024.2435269
+
 ## Instructions for use
 Test version：Matlab R2022a
 

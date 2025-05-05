@@ -22,7 +22,9 @@ The program mainly includes
 7. Accidental and systematic error settings
 
 [1] Xue, S., Wang, K., Li, B., Zhu, J., & Xiao, Z. (2024). GNSS-A Trajectory Optimization and Its Rose-Curve Solution Regarding Acoustic Delay Parameter Identification. Marine Geodesy, 1–42. https://doi.org/10.1080/01490419.2024.2435269
+
 [2] Wang K , Xue S , Xiao Z ,et al.2025.GNSS-A observation model with attached oceanic slowness gradient[J].Earth Science Informatics, 18(1).
+
 [3] 周杰,薛树强,肖圳,等.海洋声速场水平梯度对海底大地测量定位的影响[J].测绘学报,2024,53(12):2328-2337.DOI:10.11947/j.AGCS.2024.20230551.
 
 ## version
